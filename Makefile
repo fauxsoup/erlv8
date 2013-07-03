@@ -21,6 +21,7 @@ else
 ZMQ_FLAGS=
 endif
 
+V8FLAGS=library=shared
 
 all: compile
 
@@ -37,13 +38,13 @@ deps/zeromq2/.git/HEAD:
 	@git submodule update
 
 deps/v8/libv8.a: deps/v8/.git/config
-	cd deps/v8 && $(V8ENV) make dependencies && make native
+	cd deps/v8 && $(V8ENV) make dependencies && make native $(V8FLAGS)
 	#cd deps/v8 && $(V8ENV) scons $(V8FLAGS)
 
 deps/zeromq2/src/.libs/libzmq.a: deps/zeromq2/.git/HEAD
 	@cd deps/zeromq2 && ./autogen.sh && ./configure $(ZMQ_FLAGS) && make
 
-dependencies: deps/v8/libv8.a deps/zeromq2/src/.libs/libzmq.a
+dependencies: deps/erlv8/deps/v8/out/native/lib.target/libv8.so  deps/zeromq2/src/.libs/libzmq.a
 	@./rebar get-deps
 
 test: compile
