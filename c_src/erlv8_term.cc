@@ -72,7 +72,7 @@ v8::PropertyAttribute term_to_property_attribute(ErlNifEnv * env, ERL_NIF_TERM t
 
 void weak_external_cleaner(v8::Persistent<v8::Value> object, void * data) {
   if (object.IsNearDeath()) {
-        term_ref_t * term_ref = (term_ref_t *) v8::External::Unwrap(v8::Handle<v8::External>::Cast(object));
+        term_ref_t * term_ref = (term_ref_t *) v8::External::Cast(v8::Handle<v8::External>::Cast(object));
         enif_free_env(term_ref->env);
         enif_free(term_ref);
     object.Dispose();
@@ -93,7 +93,7 @@ inline v8::Handle<v8::Value> term_to_external(ERL_NIF_TERM term) {
 }
 
 inline ERL_NIF_TERM external_to_term(v8::Handle<v8::Value> val) {
-        term_ref_t * term_ref = (term_ref_t *) v8::External::Unwrap(v8::Handle<v8::External>::Cast(val));
+        term_ref_t * term_ref = (term_ref_t *) v8::External::Cast(v8::Handle<v8::External>::Cast(val));
         return term_ref->term;
 }
 
@@ -258,7 +258,7 @@ v8::Handle<v8::Value> term_to_js(v8::Handle<v8::Context> ctx,  v8::Isolate* isol
 
   } else if (enif_is_fun(env, term)) {
     TRACE("(%p) term_to_js - 3 k\n", isolate);
-    VM * vm = (VM *) v8::External::Unwrap(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
+    VM * vm = (VM *) v8::External::Cast(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
     map<ERL_NIF_TERM, v8::Handle<v8::FunctionTemplate>, cmp_erl_nif_term>::iterator iter = vm->fun_map.find(term);
 
     if (iter != vm->fun_map.end()) {
@@ -274,10 +274,10 @@ v8::Handle<v8::Value> term_to_js(v8::Handle<v8::Context> ctx,  v8::Isolate* isol
       return handle_scope.Close(f);
     }
   } else if (enif_is_pid(env, term)) {
-    VM * vm = (VM *) v8::External::Unwrap(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
+    VM * vm = (VM *) v8::External::Cast(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
     return handle_scope.Close(externalize_term(vm->extern_map, vm->external_proto_pid, term));
   } else if (enif_is_ref(env, term)) {
-    VM * vm = (VM *) v8::External::Unwrap(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
+    VM * vm = (VM *) v8::External::Cast(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
     return handle_scope.Close(externalize_term(vm->extern_map, vm->external_proto_ref, term));
   }
 
@@ -309,7 +309,7 @@ ERL_NIF_TERM js_to_term(v8::Handle<v8::Context> ctx,  v8::Isolate* isolate, ErlN
     TRACE("(%p) js_to_term - 9\n", isolate);
     enif_release_resource(ptr);
     TRACE("(%p) js_to_term - 10\n", isolate);
-    VM * vm = (VM *) v8::External::Unwrap(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
+    VM * vm = (VM *) v8::External::Cast(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
     TRACE("(%p) js_to_term - 11\n", isolate);
     ERL_NIF_TERM term = enif_make_tuple3(env,enif_make_atom(env,"erlv8_fun"),
                                          resource_term,
@@ -371,7 +371,7 @@ ERL_NIF_TERM js_to_term(v8::Handle<v8::Context> ctx,  v8::Isolate* isolate, ErlN
     resource_term = enif_make_resource(env, ptr);
     enif_release_resource(ptr);
 
-    VM * vm = (VM *) v8::External::Unwrap(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
+    VM * vm = (VM *) v8::External::Cast(v8::Context::GetCurrent()->Global()->GetHiddenValue(v8::String::New("__erlv8__")));
     ERL_NIF_TERM term = enif_make_tuple3(env,
                                          enif_make_atom(env, "erlv8_array"),
                                          resource_term,
@@ -389,7 +389,7 @@ ERL_NIF_TERM js_to_term(v8::Handle<v8::Context> ctx,  v8::Isolate* isolate, ErlN
     TRACE("(%p) js_to_term - 6\n", isolate);
     v8::Local<v8::Value> v = g->GetHiddenValue(v8::String::New("__erlv8__"));
     TRACE("(%p) js_to_term - 7\n", isolate);
-    VM * vm = (VM *) v8::External::Unwrap(v);
+    VM * vm = (VM *) v8::External::Cast(v);
     TRACE("(%p) js_to_term - 8\n", isolate);
     if (obj->GetPrototype()->Equals(vm->external_proto_num) ||
         obj->GetPrototype()->Equals(vm->external_proto_atom) ||
