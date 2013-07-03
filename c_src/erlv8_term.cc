@@ -167,7 +167,7 @@ v8::Handle<v8::Value> term_to_js(v8::Handle<v8::Context> ctx,  v8::Isolate* isol
   } else if (enif_inspect_iolist_as_binary(env, term, &string_binary)) { // string
     TRACE("(%p) term_to_js - 3 i\n", isolate);
     v8::Local<v8::String> s = v8::String::New((const char *)string_binary.data, string_binary.size);
-    if (s->Utf8Length() != string_binary.size)
+    if (s->Utf8Length() != ((unsigned) string_binary.size)
       printf("%d != %lu\n", s->Utf8Length()-1, string_binary.size);
     return handle_scope.Close(s);
   } else if (enif_is_tuple(env, term)) {
@@ -296,7 +296,7 @@ ERL_NIF_TERM js_to_term(v8::Handle<v8::Context> ctx,  v8::Isolate* isolate, ErlN
     TRACE("(%p) js_to_term - 3 b\n", isolate);
     val_res_t *ptr;
     TRACE("(%p) js_to_term - 4\n", isolate);
-    v8::Handle<v8::Function> fun = v8::Handle<v8::Function>::Cast(val);
+    //v8::Handle<v8::Function> fun = v8::Handle<v8::Function>::Cast(val);
     ERL_NIF_TERM resource_term;
     TRACE("(%p) js_to_term - 5\n", isolate);
     ptr = (val_res_t *)enif_alloc_resource(val_resource, sizeof(val_res_t));
@@ -363,7 +363,7 @@ ERL_NIF_TERM js_to_term(v8::Handle<v8::Context> ctx,  v8::Isolate* isolate, ErlN
   } else if (val->IsArray()) {
     TRACE("(%p) js_to_term - 3 i\n", isolate);
     val_res_t *ptr;
-    v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(val);
+    //v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(val);
     ERL_NIF_TERM resource_term;
     ptr = (val_res_t *)enif_alloc_resource(val_resource, sizeof(val_res_t));
     ptr->val = v8::Persistent<v8::Array>::New(v8::Handle<v8::Array>::Cast(val));

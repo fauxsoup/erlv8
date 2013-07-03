@@ -87,7 +87,6 @@ TickHandler(SetInternalTickHandler) {
             if (!strcmp(tick_name,"set_internal_extern")) {
                 enif_get_atom_length(vm->env, array[4], &len, ERL_NIF_LATIN1);
                 enif_get_atom(vm->env,array[4],(char *)&name,len + 1, ERL_NIF_LATIN1);
-                v8::Handle<v8::Object> proto = extern_name_to_proto(vm, name);
                 obj_res->val->ToObject()->SetInternalField(index,term_to_external(array[3]));
             } else {
                 obj_res->val->ToObject()->SetInternalField(index,term_to_js(obj_res->ctx,vm->isolate, vm->env,array[3]));
