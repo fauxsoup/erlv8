@@ -167,8 +167,8 @@ v8::Handle<v8::Value> term_to_js(v8::Handle<v8::Context> ctx,  v8::Isolate* isol
   } else if (enif_inspect_iolist_as_binary(env, term, &string_binary)) { // string
     TRACE("(%p) term_to_js - 3 i\n", isolate);
     v8::Local<v8::String> s = v8::String::New((const char *)string_binary.data, string_binary.size);
-    if (s->Utf8Length() != (unsigned) string_binary.size)
-      printf("%d != %lu\n", s->Utf8Length()-1, string_binary.size);
+    //if (s->Utf8Length() != string_binary.size)
+    //  printf("%d != %lu\n", s->Utf8Length()-1, string_binary.size);
     return handle_scope.Close(s);
   } else if (enif_is_tuple(env, term)) {
     TRACE("(%p) term_to_js - 3 j\n", isolate);
