@@ -42,7 +42,7 @@ deps/v8/out/native/lib.target/libv8.so: deps/v8/.git/config
 deps/zeromq2/src/.libs/libzmq.a: deps/zeromq2/.git/HEAD
 	@cd deps/zeromq2 && ./autogen.sh && ./configure $(ZMQ_FLAGS) && make
 
-dependencies:  deps/zeromq2/src/.libs/libzmq.a
+dependencies: deps/v8/out/native/lib.target/libv8.so deps/zeromq2/src/.libs/libzmq.a
 	@./rebar get-deps
 
 test: compile
