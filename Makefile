@@ -36,7 +36,7 @@ deps/zeromq2/.git/HEAD:
 	@git submodule update
 
 deps/v8/libv8.a: deps/v8/.git/config
-	cd deps/v8 && $(V8ENV) make dependencies && make native library=shared
+	cd deps/v8 && make dependencies && make native library=shared
 	export LD_LIBRARY_PATH=$SCRIPTPATH/deps/v8/out/native/lib.target:$LD_LIBRARY_PATH
 
 deps/zeromq2/src/.libs/libzmq.a: deps/zeromq2/.git/HEAD
