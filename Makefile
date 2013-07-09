@@ -1,3 +1,5 @@
+SCRIPTPATH=`dirname ${SCRIPT}`
+
 X64=$(shell file -L `which epmd` | grep x86_64 | wc -l | xargs echo)
 X64L=$(shell file -L `which epmd` | grep x86-64 | wc -l | xargs echo)
 OSX=$(shell uname | grep Darwin | wc -l | xargs echo)
