@@ -3,8 +3,8 @@
 -include("erlv8.hrl").
 
 -extends(erlv8_object).
-
 -compile({no_auto_import,[length/1]}).
+-compile([{parse_transform, extender}]).
 
 -export([list/1, object/1, length/1, push/2, unpush/1, unshift/2, delete/2,
 

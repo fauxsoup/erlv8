@@ -3,6 +3,7 @@
 -include("erlv8.hrl").
 
 -extends(erlv8_object).
+-compile([{parse_transform, extender}]).
 
 -export([call/1,call/2,call/3,instantiate/1, instantiate/2, object/1,
 

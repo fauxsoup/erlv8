@@ -2,29 +2,27 @@
 -on_load(init/0).
 
 -export([init/0, new_vm/0, set_server/2, global/2, context/1, new_context/1,
-         tick/3, stop/2, kill/1]).
+        tick/3, stop/2, kill/1]).
 
 -define(DEFAULT_PREEMPTION, 100).
 
 init() ->
     Preemption = 
-	case application:get_env(erlv8, preemption_ms) of
-	    {ok, V} ->
-		V;
-	    _ ->
-		?DEFAULT_PREEMPTION
-	end,
+    case application:get_env(erlv8, preemption_ms) of
+        {ok, V} ->
+            V;
+        _ ->
+            ?DEFAULT_PREEMPTION
+    end,
     case os:getenv("ERLV8_SO_PATH") of
-	false ->
-	    case code:which(erlv8_nif) of
-		Filename when is_list(Filename) ->
-		    erlang:load_nif(filename:join([filename:dirname(Filename),"../priv/erlv8_drv"]), Preemption);
-		Err ->
-		    Err
-	    end;
-	Path ->
-	    Filename = filename:join([Path,"erlv8_drv"]),
-	    erlang:load_nif(Filename,Preemption)
+        false ->
+            PrivDir = code:priv_dir(erlv8),
+            Filename = filename:join([PrivDir,"erlv8_drv"]),
+            io:format("Loading library: ~s~n", [Filename]),
+            io:format("Result: ~p~n", [erlang:load_nif(Filename, Preemption)]);
+        Path ->
+            Filename = filename:join([Path,"erlv8_drv"]),
+            erlang:load_nif(Filename,Preemption)
     end.
 
 
